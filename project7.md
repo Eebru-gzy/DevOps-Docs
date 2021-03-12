@@ -1,9 +1,9 @@
 # **Introduction**
 * This task introduces an architecture that requires the use of different servers to archive different purposes:
 
-  * NFS Server: 1 quantity. The server that hosts the web applications files as well as web logs.
+  * NFS Server: 1 quantity. The server that hosts the web applications files as well as web logs for share between the web servers.
   * Database Server: 1 quantity. The server that the database would be on.
-  * Web Server: 3 quantity. The servers that host the   web application.
+  * Web Server: 3 quantity. The servers that host the web application.
 
 # **Step 1**
 ## **Initializing the NFS Server**
@@ -70,7 +70,18 @@ sudo systemctl restart nfs-server
 * I checked the the nfs-util port with `rpcinfo -p | grep nfs` to grab the port NFS is running on.
 * I added the port to the security inbound on the EC2
 
-![nfs_inbound](./p7/inbound-nfs.png)
+![nfs_inbound](./p7/inbound-nfs2.png)
 
 # **Step 2**
+## **Installing and setting up database**
 
+* I installed MySQL server with `sudo yum install mysql-server`.
+
+![installing mysql](./p7/installing-mysql.png)
+
+* I created a mysql user with subnet-CIDR host `CREATE USER 'webaccess'@'<subnet-CIDR> IDENTIFIED BY <my pass>;`
+* I created a database `CREATE DATABASE tooling;`
+* `GRANT ALL PRIVILEGES ON tooling.* TO 'webaccess'@'<subnet-CIDR>';` granted access to the dab user.
+* `FLUSH PRIVILEGES;` 
+* I opend the mysql configuration file at `/etc/mysql/mysql.conf.d/mysqld.cnf` to edit the bind rule to `0.0.0.0` to enable access from hosts other than localhost.
+* On the database EC2 instance, I added the inbound rule of `3306` port - port that the web access would be communicating on.
