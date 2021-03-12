@@ -85,3 +85,47 @@ sudo systemctl restart nfs-server
 * `FLUSH PRIVILEGES;` 
 * I opend the mysql configuration file at `/etc/mysql/mysql.conf.d/mysqld.cnf` to edit the bind rule to `0.0.0.0` to enable access from hosts other than localhost.
 * On the database EC2 instance, I added the inbound rule of `3306` port - port that the web access would be communicating on.
+
+# **Step 3**
+## **Initializing and configuring the web-server**
+
+* I spun up an EC2 instance and installed NFS client on it. `sudo yum install nfs-utils nfs4-acl-tools -y`
+* `sudo mkdir /var/www` to create directory where the web server would live.
+* I mounted the web server directory on the mount point from nfs server  `sudo mount -t nfs -o rw,nosuid <NFS-Server-Private-IP-Address>:/mnt/apps /var/www`
+
+* I installed Apache web server `sudo yum install httpd -y` and started the Apache service.
+
+![apache](./p7/http-status-web.png)
+
+* I backed up the Apache log and error files resident in `/var/log/httpd` in `httpd.back`, then I mounted the nfs log mount point on the httpd log directory with `sudo mount -t nfs -o rw,nosuid <NFS-Server-Private-IP-Address>:/mnt/logs /var/log/httpd` after which I restored the files.
+
+* I added entry to the `/etc/fstab` to allow nfs mount on system boot.
+
+![fstab](./p7/fstab-web2.png)
+
+* I installed git and clone the project from the specified repository.
+
+![git](./p7/installing-git-web.png)
+
+* When I check the nfs server at mount point `/mnt/apps` I found the web server directory `html` there:
+
+![web-files](./p7/view-apache-on-nfs.png)
+
+* I opened the inbound port of `80` on EC2 to make access for web browser.
+
+* I ran the command `sudo setenforce 0` to give acces to the browser
+
+* I installed mysql-client on the web server and ran the command to connect to the remote mysql sever on the database server, and also create a record in the tooling database that I already created when I was setting up, the tooling.sql file is a script to create the record: `mysql -u webaccess -h <database server ip> -p tooling < tooling.sql`
+
+* I repeated this processes for the rest web-servers, and they essentially shared web files from the nfs server.
+
+* I accessed the web servers from the browser
+
+### Web 1
+![web-1](./p7/web-webpage.png)
+
+### Web 2
+![web-1](./p7/web2.png)
+
+
+## **The end.**
