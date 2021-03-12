@@ -3,7 +3,7 @@
 
   * NFS Server: 1 quantity. The server that hosts the web applications files as well as web logs for share between the web servers.
   * Database Server: 1 quantity. The server that the database would be on.
-  * Web Server: 3 quantity. The servers that host the web application.
+  * Web Server: 3 quantities. The servers that host the web application.
 
 # **Step 1**
 ## **Initializing the NFS Server**
@@ -42,7 +42,7 @@ sudo chown -R nobody: /mnt/apps
 sudo chown -R nobody: /mnt/logs
 sudo chown -R nobody: /mnt/opt
 ```
-* Enabling Read write execute on the these points:
+* Enabling Read, write, execute permissions on the these points:
 ```
 sudo chmod -R 777 /mnt/apps
 sudo chmod -R 777 /mnt/logs
@@ -66,7 +66,7 @@ sudo systemctl restart nfs-server
 ![export mounts](./p7/exporting-mounts2.png)
 
 ## **Opening NFS port in the NFS EC2 security group**
-* At this point mount points are aready for the web servers, but the security group on the EC2 instance still would not allow access into the EC2 instance.
+* At this point mount points are ready for the web servers, but the security group on the EC2 instance still would not allow access into the EC2 instance.
 * I checked the the nfs-util port with `rpcinfo -p | grep nfs` to grab the port NFS is running on.
 * I added the port to the security inbound on the EC2
 
@@ -74,6 +74,7 @@ sudo systemctl restart nfs-server
 
 # **Step 2**
 ## **Installing and setting up database**
+* I spun up the EC2 instance.
 
 * I installed MySQL server with `sudo yum install mysql-server`.
 
