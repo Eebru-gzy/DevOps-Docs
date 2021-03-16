@@ -15,23 +15,23 @@
 * Using the `MBR's fdisk utility` I created a partition of type LVM (8e) on all the block volumes.
 * I made logical volumes for web apps at `/mnt/apps`, web logs at `/mnt/logs` and opt at `/mnt/opt`
 
-![logical volume](./p7/making-lv.png)
+![logical volume](./p7-imgs/making-lv.png)
 * I also made sure these mount points are always mounting when the system boots by add entry to the `/etc/fstab` file.
 * Below is the output of the `mount` command.
 
-![mount points](./p7/lv-mounts.png)
+![mount points](./p7-imgs/lv-mounts.png)
 
 
 ## **Installing NFS Server, and configure to start on system boot**
 * `sudo yum update` to update the system depenedencies.
 * `sudo yum install nfs-utils -y` to install nfs and its dependencies
 
-![nfs install](./p7/nfs-install.png)
+![nfs install](./p7-imgs/nfs-install.png)
 * `sudo systemctl start nfs-server` to start the nfs service
 * `sudo systemctl enable nfs-server` to make sure the nfs service starts on boot up
 * `sudo systemctl status nfs-server` shows the status of the nfs service running.
 
-![nfs install](./p7/started-enabled-NFS.png)
+![nfs install](./p7-imgs/started-enabled-NFS.png)
 
 ## **Setting permission on the mount points for web servers accessibility**
 
@@ -48,7 +48,7 @@ sudo chmod -R 777 /mnt/apps
 sudo chmod -R 777 /mnt/logs
 sudo chmod -R 777 /mnt/opt
 ```
-![perm_lvmount](./p7/changing-perm-on-lvMounts-nfs.png)
+![perm_lvmount](./p7-imgs/changing-perm-on-lvMounts-nfs.png)
 * Restarting the nfs service to synchronize the settings
 ```
 sudo systemctl restart nfs-server
@@ -63,14 +63,14 @@ sudo systemctl restart nfs-server
 /mnt/logs <Subnet-CIDR>(rw,sync,no_all_squash,no_root_squash)
 /mnt/opt <Subnet-CIDR>(rw,sync,no_all_squash,no_root_squash)
 ```
-![export mounts](./p7/exporting-mounts2.png)
+![export mounts](./p7-imgs/exporting-mounts2.png)
 
 ## **Opening NFS port in the NFS EC2 security group**
 * At this point mount points are ready for the web servers, but the security group on the EC2 instance still would not allow access into the EC2 instance.
 * I checked the the nfs-util port with `rpcinfo -p | grep nfs` to grab the port NFS is running on.
 * I added the port to the security inbound on the EC2
 
-![nfs_inbound](./p7/inbound-nfs2.png)
+![nfs_inbound](./p7-imgs/inbound-nfs2.png)
 
 # **Step 2**
 ## **Installing and setting up database**
@@ -78,7 +78,7 @@ sudo systemctl restart nfs-server
 
 * I installed MySQL server with `sudo yum install mysql-server`.
 
-![installing mysql](./p7/installing-mysql.png)
+![installing mysql](./p7-imgs/installing-mysql.png)
 
 * I created a mysql user with subnet-CIDR host `CREATE USER 'webaccess'@'<subnet-CIDR> IDENTIFIED BY <my pass>;`
 * I created a database `CREATE DATABASE tooling;`
@@ -96,21 +96,21 @@ sudo systemctl restart nfs-server
 
 * I installed Apache web server `sudo yum install httpd -y` and started the Apache service.
 
-![apache](./p7/http-status-web.png)
+![apache](./p7-imgs/http-status-web.png)
 
 * I backed up the Apache log and error files resident in `/var/log/httpd` in `httpd.back`, then I mounted the nfs log mount point on the httpd log directory with `sudo mount -t nfs -o rw,nosuid <NFS-Server-Private-IP-Address>:/mnt/logs /var/log/httpd` after which I restored the files.
 
 * I added entry to the `/etc/fstab` to allow nfs mount on system boot.
 
-![fstab](./p7/fstab-web2.png)
+![fstab](./p7-imgs/fstab-web2.png)
 
 * I installed git and clone the project from the specified repository.
 
-![git](./p7/installing-git-web.png)
+![git](./p7-imgs/installing-git-web.png)
 
 * When I check the nfs server at mount point `/mnt/apps` I found the web server directory `html` there:
 
-![web-files](./p7/view-apache-on-nfs.png)
+![web-files](./p7-imgs/view-apache-on-nfs.png)
 
 * I opened the inbound port of `80` on EC2 to make access for web browser.
 
@@ -123,10 +123,10 @@ sudo systemctl restart nfs-server
 * I accessed the web servers from the browser
 
 ### Web 1
-![web-1](./p7/web-webpage.png)
+![web-1](./p7-imgs/web-webpage.png)
 
 ### Web 2
-![web-1](./p7/web2.png)
+![web-1](./p7-imgs/web2.png)
 
 
 ## **The end.**
