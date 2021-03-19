@@ -15,9 +15,9 @@
 
 ![servers](./p8-imgs/server-inventory.png)
 
-* I a TCP inbound rule of port 80 for browsers access on the server.
+* I added TCP inbound rule of port 80 for browsers access on the server.
 
-* Beacause the webservers operating on the Web Server machines are Apache web servers, I installed Apache together with its Load balancer on the machine like so:
+* Beacause the web servers operating on the Web Server machines are Apache web servers, I installed Apache together with its Load balancer on the machine like so:
 
 ```
 sudo apt install apache2 -y
@@ -33,7 +33,7 @@ sudo a2enmod proxy_http
 sudo a2enmod headers
 sudo a2enmod lbmethod_bytraffic
 ``` 
-* In the Apache default site-available folder found at `/etc/apache2/sites-available/000-default.conf`, I added the configurations for load balancing like so:
+* In the Apache site-available folder, I added the configurations for load balancing like t theo default config file at `/etc/apache2/sites-available/000-default.conf`
 
 ```
 <Proxy "balancer://mycluster">
@@ -61,7 +61,7 @@ ProxyPassReverse / balancer://mycluster/
   * `byheartbeat`
   * `bybusyness`
 
-* Also, the propotion by which the traffic would be distributed is defined in the set upas well.
+* Also, the propotion by which the traffic would be distributed is defined in the set up as well.
 
 
 ## **Unmounting the web servers' access and log file**
@@ -70,26 +70,26 @@ ProxyPassReverse / balancer://mycluster/
 
 * Unmounting the Apache's web servers log files is necessary to be able to read individual traffic accesses to the web servers from the Load Balancer server.
 
-* I unmounted the the log files on both web servers like so: `sudo umount /var/log/htpd` and I also remove their entry from the `/etc/fstab` file.
+* I unmounted the log files on both web servers like so: `sudo umount /var/log/htpd` and I also remove their entry from the `/etc/fstab` file.
 
 ## Reading the traffics from the Web Servers 
 * I ran `sudo tail -f /var/log/httpd/access_log` on each of the web servers, this enabled me to read  new entries into the `access_log` file as they are entering.
 
-* I realoaded the load balancer's public DNS in the browser, and I can see entries in the web servers' log files. This imply that traffics from the load balancer is getting to the web servers.
+* I reloaded the load balancer's public DNS in the browser, and I can see entries in the web servers' log files. This implies that traffic from the load balancer are getting to the web servers.
 
 
 # **Configuring local DNS Resolution**
 
-* The Domain Name System server is a service that converts (resolution) public IPs of server on the internet to their respective names, it is like a global database of names and IPs od servers on the internet.
+* The Domain Name System server is a service that converts (resolution) public IPs of server on the internet to their respective names, it is like a global database of names and IPs of servers on the internet.
 
-* We can also do a DNS resolution locally on our servers, such we can reference servers by names and not their IPs, I implemented that by editing the `/etc/hosts` file and adding the following to the file:
+* We can also do a DNS resolution locally on our servers, as such we can reference servers by names and not their IPs, I implemented that by editing the `/etc/hosts` file and adding the following to the file:
 
 ```
 <WebServer1-Private-IP-Address> Web1
 <WebServer2-Private-IP-Address> Web2
 ```
 
-* I now edited config for load balancing located at at `/etc/apache2/sites-available/000-default.conf` and change the IPs for the servers to their names specified in `/etc/hosts`.
+* I edited config for load balancing located at `/etc/apache2/sites-available/000-default.conf` and change the IPs for the servers to their respective names specified in `/etc/hosts`.
 
 ```
 BalancerMember http://Web1:80 loadfactor=5 timeout=1
