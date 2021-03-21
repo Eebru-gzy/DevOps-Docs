@@ -74,9 +74,9 @@ sudo apt-get install jenkins
 
 * I configured the Job to publish over SHH in the post build section.
 
-* I changed the ownernership of the `/mnt/app` directory to the user I used in the Jenkins SSH set up. Another work around is to make the jenkins username the nameof the owner of the `/mnt/app` directory.
+* I changed the ownernship of the `/mnt/app` directory to the user I used in the Jenkins SSH set up. Another work around is to make the jenkins username the name of the owner of the `/mnt/app` directory.
 
-* I made changes in the source code to trigger the build, and see my changes in the NFS server after it has succesfully published over SSH, the logs in the build console showed below.
+* I made changes in the source code to trigger the build, and see my changes in the NFS server after it has succesfully published over SSH. The logs in the build console is showed below.
 
 ![pushed artifact](./9.png)
 
