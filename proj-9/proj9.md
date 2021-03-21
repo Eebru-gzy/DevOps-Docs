@@ -44,13 +44,11 @@ sudo apt-get install jenkins
 
 ![jenkins status](./5.png)
 
-* This would always build to Jenkins everytime there's a new push to the branch specified in the Jenkins job
-
-* I created a new Freestyle project on Jenkins and configured it with my my tooling project GitHub git URl.
+* I created a new Freestyle project on Jenkins and configured it with my tooling project GitHub git URl.
 
 ![jenkins job](./6.png)
 
-* I saved and run the build  by clicking the Build Nowlink on the Job's screen. 
+* I saved and run the build  by clicking the Build Now link on the Job's screen. 
 
 ![build](./7a.png)
 
