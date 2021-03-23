@@ -1,5 +1,8 @@
 # **Introduction**
-* This task introduces an architecture that requires the use of different servers to archive different purposes:
+
+### **Title: DevOps Tooling Website Solution**
+
+* This task introduces an architecture that requires the use of different servers to achieve different purposes:
 
   * NFS Server: 1 quantity. The server that hosts the web applications files as well as web logs for share between the web servers.
   * Database Server: 1 quantity. The server that the database would be on.
