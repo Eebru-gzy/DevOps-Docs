@@ -1,5 +1,7 @@
 # **Introduction**
 
+### **Title: Load Balancer Solution with Apache**
+
 * This project is a continuation from `project 7`, where I implemented connections of Web-servers to NFS and database server. This project is to build a Load Balancer on top of the websers to distribute traffic across the web servers.
 
 * As a reminder, below are the listed inventory of types of my servers:
