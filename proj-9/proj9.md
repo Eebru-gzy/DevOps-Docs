@@ -1,9 +1,8 @@
 # **Introduction**
 
-### **Title: Tooling Website deployment automation with Continuous Integration. Introduction to Jenkins**
+## **Title: Tooling Website deployment automation with Continuous Integration. Introduction to Jenkins**
 
 * This project is an introduction to CI - Continous Integration. I implemented CI making use of GitHub Webhook to trigger build on Jenkins server, after which the Jenkins build Artifact then get pushed to the NFS server that is serving the web servers for the DevOps Tooling project that was started from project 7.
-
 
 ## **Spinning up Server and Installing Jenkins**
 
@@ -11,18 +10,19 @@
 
 * Jenkins is Java based, so I installed Java Development Kit as a dependency for it to run.
 
-```
+```bash
 sudo apt install default-jdk-headless
 ```
 
 * I installed Jenkins running the following commands:
 
-```
+```bash
 wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
 sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
 sudo apt update
 sudo apt-get install jenkins
 ```
+
 ![jenkins status](./2.png)
 
 * Jenkins run on a default port 8080, so I opened the TCP inbound rule of 8080 on AWS security group.
@@ -39,10 +39,9 @@ sudo apt-get install jenkins
 
 ![jenkins status](./4.png)
 
-
 ## **Configure Jenkins to retrieve source codes from GitHub using Webhooks**
 
-* For Jenkins to receive build from Github source code, I set up the webhook from github. 
+* For Jenkins to receive build from Github source code, I set up the webhook from github.
 
 ![jenkins status](./5.png)
 
@@ -50,7 +49,7 @@ sudo apt-get install jenkins
 
 ![jenkins job](./6.png)
 
-* I saved and run the build  by clicking the Build Now link on the Job's screen. 
+* I saved and run the build  by clicking the Build Now link on the Job's screen.
 
 ![build](./7a.png)
 
@@ -63,8 +62,6 @@ sudo apt-get install jenkins
 ![Jenkins artifact](./8.png)
 
 * The artifact are saved locally at `/var/lib/jenkins/jobs/tooling_github/builds/<build_number>/archive/`
-
-
 
 ## **Configure Jenkins to copy artifacts over SSH to NFS Server**
 
@@ -83,6 +80,5 @@ sudo apt-get install jenkins
 ![pushed artifact](./9.png)
 
 * On the NFS server, I cat the `/mnt/apps/README.md` and found the tooling file repository and its changes.
-
 
 ### **The End.**
