@@ -82,14 +82,17 @@ sudo systemctl restart nfs-server
 ![export mounts](./p7-imgs/exporting-mounts2.png)
 
 ## **Opening NFS port in the NFS EC2 security group**
+
 * At this point mount points are ready for the web servers, but the security group on the EC2 instance still would not allow access into the EC2 instance.
 * I checked the the nfs-util port with `rpcinfo -p | grep nfs` to grab the port NFS is running on.
 * I added the port to the security inbound on the EC2
 
 ![nfs_inbound](./p7-imgs/inbound-nfs2.png)
 
-# **Step 2**
+## **Step 2**
+
 ## **Installing and setting up database**
+
 * I spun up the EC2 instance.
 
 * I installed MySQL server with `sudo yum install mysql-server`.
@@ -99,11 +102,12 @@ sudo systemctl restart nfs-server
 * I created a mysql user with subnet-CIDR host `CREATE USER 'webaccess'@'<subnet-CIDR> IDENTIFIED BY <my pass>;`
 * I created a database `CREATE DATABASE tooling;`
 * `GRANT ALL PRIVILEGES ON tooling.* TO 'webaccess'@'<subnet-CIDR>';` granted access to the dab user.
-* `FLUSH PRIVILEGES;` 
+* `FLUSH PRIVILEGES;`
 * I opend the mysql configuration file at `/etc/mysql/mysql.conf.d/mysqld.cnf` to edit the bind rule to `0.0.0.0` to enable access from hosts other than localhost.
 * On the database EC2 instance, I added the inbound rule of `3306` port - port that the web access would be communicating on.
 
-# **Step 3**
+## **Step 3**
+
 ## **Initializing and configuring the web-server**
 
 * I spun up an EC2 instance and installed NFS client on it. `sudo yum install nfs-utils nfs4-acl-tools -y`
@@ -139,10 +143,11 @@ sudo systemctl restart nfs-server
 * I accessed the web servers from the browser
 
 ### Web 1
+
 ![web-1](./p7-imgs/web-webpage.png)
 
 ### Web 2
-![web-1](./p7-imgs/web2.png)
 
+![web-1](./p7-imgs/web2.png)
 
 ## **The end.**
